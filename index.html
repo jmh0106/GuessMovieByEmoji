@@ -1,298 +1,382 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>이모지 게임</title>
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            overflow: hidden;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            width: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            transition: transform 0.5s ease-out;
-        }
-        .title {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        .button {
-            padding: 10px 20px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        .start-button {
-            background-color: #007bff;
-        }
-        .restart-button {
-            background-color: #28a745;
-        }
-        .game-screen, .result-container {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            opacity: 0;
-            transition: opacity 0.5s ease-in;
-        }
-        .emoji-box-container {
-            position: absolute;
-            top: 20%;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-        .emoji-box {
-            width: 300px;
-            height: 300px;
-            border-radius: 15px;
-            background-color: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-        }
-        .input-container, .answer-container {
-            position: absolute;
-            bottom: 20%;
-            width: 80%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
-        }
-        .input-container {
-            opacity: 1;
-            visibility: visible;
-        }
-        .answer-container {
-            opacity: 0;
-            visibility: hidden;
-        }
-        .input-box {
-            padding: 10px;
-            font-size: 1rem;
-            flex: 1;
-            margin-right: 10px;
-        }
-        .confirm-button, .next-button {
-            padding: 10px 20px;
-            font-size: 1rem;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            color: white;
-        }
-        .confirm-button {
-            background-color: #28a745;
-        }
-        .next-button {
-            background-color: #007bff;
-        }
-        .status {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 1.2rem;
-        }
-        .result-text {
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-        #feedback {
-            font-size: 1.5rem;
-            margin-top: 100px;
-            color: #000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
-        }
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: transform 0.5s ease-out;
+      }
+
+      .title {
+        font-size: 3rem;
+        margin-bottom: 20px;
+      }
+
+      .button {
+        padding: 10px 20px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: white;
+        border: none;
+        border-radius: 5px;
+      }
+
+      .start-button {
+        background-color: #007bff;
+      }
+
+      .restart-button {
+        background-color: #28a745;
+      }
+
+      .game-screen,
+      .result-container {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        opacity: 0;
+        transition: opacity 0.5s ease-in;
+      }
+
+      .emoji-box-container {
+        position: absolute;
+        top: 20%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .emoji-box {
+        width: 300px;
+        height: 300px;
+        border-radius: 15px;
+        background-color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+      }
+
+      .input-container,
+      .answer-container {
+        position: absolute;
+        bottom: 20%;
+        width: 80%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+      }
+
+      .input-container {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .answer-container {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .input-box {
+        padding: 10px;
+        font-size: 1rem;
+        flex: 1;
+        margin-right: 10px;
+      }
+
+      .confirm-button,
+      .next-button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        color: white;
+      }
+
+      .confirm-button {
+        background-color: #28a745;
+      }
+
+      .next-button {
+        background-color: #007bff;
+      }
+
+      .status {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 1.2rem;
+      }
+
+      .result-text {
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      #feedback {
+        font-size: 1.5rem;
+        margin-top: 100px;
+        color: #000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container" id="main-screen">
-        <div class="title">이모지 게임</div>
-        <button class="button start-button" onclick="startGame()">게임 시작</button>
+      <div class="title">이모지 게임</div>
+      <button class="button start-button" onclick="startGame()">게임 시작</button>
     </div>
-
     <div class="game-screen" id="game-screen">
-        <div class="status" id="status">문제 1 / 10</div>
-        <div class="emoji-box-container">
-            <div class="emoji-box" id="emoji-box"></div>
-        </div>
-        <div id="feedback"></div>
-        <div class="input-container" id="input-container">
-            <input type="text" class="input-box" id="answer-input" placeholder="정답 입력">
-            <button class="confirm-button" onclick="confirmAnswer()">정답 확정</button>
-        </div>
-        <div class="answer-container" id="answer-container">
-            <div class="answer-text" id="answer-text"></div>
-            <button class="next-button" onclick="nextQuestion()">다음 문제</button>
-        </div>
+      <div class="status" id="status">문제 1 / 10</div>
+      <div class="emoji-box-container">
+        <div class="emoji-box" id="emoji-box"></div>
+      </div>
+      <div id="feedback"></div>
+      <div class="input-container" id="input-container">
+        <input type="text" class="input-box" id="answer-input" placeholder="정답 입력">
+        <button class="confirm-button" onclick="confirmAnswer()">정답 확정</button>
+      </div>
+      <div class="answer-container" id="answer-container">
+        <div class="answer-text" id="answer-text"></div>
+        <button class="next-button" onclick="nextQuestion()">다음 문제</button>
+      </div>
     </div>
-
     <div class="result-container" id="result-container">
-        <div class="result-text" id="result-text"></div>
-        <button class="button restart-button" onclick="resetGame()">게임 다시하기</button>
+      <div class="result-text" id="result-text"></div>
+      <button class="button restart-button" onclick="resetGame()">게임 다시하기</button>
     </div>
-
     <script>
-        const allQuestions = [
-            { emoji: '🚢❄️❤️', answer: '타이타닉' },
-            { emoji: '🦸‍♂️🦸‍♀️', answer: '어벤져스' },
-            { emoji: '🧙‍♂️🦉⚡', answer: '해리포터' },
-            { emoji: '🌌🛸', answer: '스타워즈' },
-            { emoji: '🦖🌳', answer: '쥬라기 공원' },
-            { emoji: '👽📞', answer: 'E.T.' },
-            { emoji: '🌍🧟', answer: '월드워Z' },
-            { emoji: '🕵️‍♂️🔍', answer: '셜록 홈즈' },
-            { emoji: '🤡🏙️', answer: '조커' },
-            { emoji: '❄️👭', answer: '겨울왕국' }
-        ];
+      const allQuestions = [{
+        emoji: '🚢💔🌊❤️👫💧🏛️',
+        answer: '타이타닉'
+      }, {
+        emoji: '🦸‍♂️🦸‍♀️🛡️🔨🕷️⚔️🌌',
+        answer: '어벤져스'
+      }, {
+        emoji: '🧙‍♂️🔮🪄⚡🏰📚🦉',
+        answer: '해리포터'
+      }, {
+        emoji: '🌌👽🌿🦄💫💙🔮',
+        answer: '아바타'
+      }, {
+        emoji: '🦖🌴🚀🦕🏞️🔬🌋',
+        answer: '쥬라기 공원'
+      }, {
+        emoji: '💤🌀🏙️🧠🔐🗝️🌌',
+        answer: '인셉션'
+      }, {
+        emoji: '🚀🌌🌠💫🌍💔🕰️',
+        answer: '인터스텔라'
+      }, {
+        emoji: '🃏🎭🤡🔪🚔💔🧠',
+        answer: '조커'
+      }, {
+        emoji: '❄️👭🏔️🌨️⛄💙🎵',
+        answer: '겨울왕국'
+      }, {
+        emoji: '🎩🍾🏙️🕵️‍♂️💔💃',
+        answer: '위대한 개츠비'
+      }, {
+        emoji: '🦁👑🌍🌿🌞🐒👑',
+        answer: '라이온 킹'
+      }, {
+        emoji: '🚗💥🔥🏜️⚔️👨‍👩‍👧‍👦🔫',
+        answer: '매드 맥스: 분노의 도로'
+      }, {
+        emoji: '🚗🕰️⚡📼🕵️‍♂️🎬💫',
+        answer: '백 투 더 퓨처'
+      }, {
+        emoji: '🏃‍♂️🍫📞🍤🛳️🗺️🇺🇸',
+        answer: '포레스트 검프'
+      }, {
+        emoji: '🦇🃏🔫💰🌃💔🚨',
+        answer: '다크 나이트'
+      }, {
+        emoji: '🏨🎩🎨📚🍰💼🔍',
+        answer: '그랜드 부다페스트 호텔'
+      }, {
+        emoji: '🤖🔫🌆🚀💥🕶️🗡️',
+        answer: '터미네이터'
+      }, {
+        emoji: '🏛️⚔️👊🎭🌟💥🛡️',
+        answer: '글래디에이터'
+      }, {
+        emoji: '🐉👦🏰🔥🚀🎠❤️',
+        answer: '드래곤 길들이기'
+      }, {
+        emoji: '🔒🔨🕵️‍♂️💔🔍👊😱',
+        answer: '올드보이'
+      }, {
+        emoji: '🕵️‍♂️📦🔫💣🚁🌍💥',
+        answer: '미션 임파서블'
+      }, {
+        emoji: '💻👤🔮🕶️🚪💚💥',
+        answer: '매트릭스'
+      }, {
+        emoji: '📚👨‍🏫📝🧠🌟🎓💭',
+        answer: '죽은 시인의 사회'
+      }, {
+        emoji: '💼📉✈️🔍🕵️‍♂️💵🎭',
+        answer: '캐치 미 이프 유 캔'
+      }, {
+        emoji: '🎹🎤🌟💃❤️🎷🌆',
+        answer: '라라랜드'
+      }, {
+        emoji: '🚤🐅🌊📖🌅🏝️🧘‍♂️',
+        answer: '라이프 오브 파이'
+      }, {
+        emoji: '🏠🍲💰🎭🔍🚪💥',
+        answer: '기생충'
+      }, {
+        emoji: '🍗👮‍♂️😂🚔🔫🏆',
+        answer: '극한직업'
+      }, {
+        emoji: '👼⚖️🔥🌌👻💔💫',
+        answer: '신과함께: 죄와 벌'
+      }, {
+        emoji: '🚆🧟‍♂️💥😱👨‍👩‍👧‍👦',
+        answer: '부산행'
+      }, {
+        emoji: '🔫🎯👮‍♂️💔🔍🔪',
+        answer: '암살'
+      }];
+      let questions = [];
+      let currentQuestionIndex = 0;
+      let correctAnswers = 0;
 
-        let questions = [];
-        let currentQuestionIndex = 0;
-        let correctAnswers = 0;
+      function startGame() {
+        const mainScreen = document.getElementById('main-screen');
+        const gameScreen = document.getElementById('game-screen');
+        questions = getRandomQuestions(allQuestions, 10);
+        currentQuestionIndex = 0;
+        correctAnswers = 0;
+        updateQuestion();
+        mainScreen.style.transform = 'translateY(-100vh)';
+        setTimeout(() => {
+          mainScreen.style.display = 'none';
+          gameScreen.style.display = 'flex';
+          setTimeout(() => {
+            gameScreen.style.opacity = '1';
+          }, 10);
+        }, 500);
+        document.getElementById('answer-input').addEventListener('keydown', function(event) {
+          if (event.key === 'Enter') confirmAnswer();
+        });
+      }
 
-        function startGame() {
-            const mainScreen = document.getElementById('main-screen');
-            const gameScreen = document.getElementById('game-screen');
+      function getRandomQuestions(allQuestions, numberOfQuestions) {
+        return allQuestions.sort(() => 0.5 - Math.random()).slice(0, numberOfQuestions);
+      }
+      // 문자열에서 모든 공백 제거
+      function normalizeString(str) {
+        return str.trim().toLowerCase().replace(/\s+/g, '');
+      }
+      // 정답 비교 함수
+      function confirmAnswer() {
+        const inputContainer = document.getElementById('input-container');
+        const answerContainer = document.getElementById('answer-container');
+        const feedback = document.getElementById('feedback');
+        const answerInput = document.getElementById('answer-input');
+        const correctAnswer = questions[currentQuestionIndex].answer;
+        const userAnswer = normalizeString(answerInput.value);
+        answerInput.value = '';
+        if (userAnswer === normalizeString(correctAnswer)) {
+          feedback.innerText = '맞았습니다!';
+          feedback.style.color = '#28a745';
+          correctAnswers++;
+        } else {
+          feedback.innerText = '틀렸습니다!';
+          feedback.style.color = '#dc3545';
+        }
+        feedback.style.opacity = '1';
+        feedback.style.visibility = 'visible';
+        inputContainer.style.opacity = '0';
+        setTimeout(() => {
+          inputContainer.style.display = 'none';
+          answerContainer.style.display = 'flex';
+          answerContainer.style.opacity = '1';
+          answerContainer.style.visibility = 'visible';
+          document.getElementById('answer-text').innerText = `정답: ${correctAnswer}`;
+        }, 500);
+      }
 
-            questions = getRandomQuestions(allQuestions, 10);
-            currentQuestionIndex = 0;
-            correctAnswers = 0;
+      function nextQuestion() {
+        const inputContainer = document.getElementById('input-container');
+        const answerContainer = document.getElementById('answer-container');
+        const feedback = document.getElementById('feedback');
+        feedback.style.opacity = '0';
+        feedback.style.visibility = 'hidden';
+        answerContainer.style.opacity = '0';
+        answerContainer.style.visibility = 'hidden';
+        setTimeout(() => {
+          currentQuestionIndex++;
+          if (currentQuestionIndex < questions.length) {
             updateQuestion();
-
-            mainScreen.style.transform = 'translateY(-100vh)';
+            answerContainer.style.display = 'none';
+            inputContainer.style.display = 'flex';
+            inputContainer.style.opacity = '1';
+            inputContainer.style.visibility = 'visible';
+          } else {
+            document.getElementById('game-screen').style.opacity = '0';
             setTimeout(() => {
-                mainScreen.style.display = 'none';
-                gameScreen.style.display = 'flex';
-                setTimeout(() => {
-                    gameScreen.style.opacity = '1';
-                }, 10);
+              document.getElementById('game-screen').style.display = 'none';
+              document.getElementById('result-container').style.display = 'flex';
+              document.getElementById('result-container').style.opacity = '1';
+              document.getElementById('result-text').innerText = `게임 종료! 맞춘 문제: ${correctAnswers}개`;
             }, 500);
+          }
+        }, 500);
+      }
 
-            document.getElementById('answer-input').addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') confirmAnswer();
-            });
-        }
+      function updateQuestion() {
+        document.getElementById('emoji-box').innerText = questions[currentQuestionIndex].emoji;
+        document.getElementById('status').innerText = `문제 ${currentQuestionIndex + 1} / ${questions.length}`;
+      }
 
-        function getRandomQuestions(allQuestions, numberOfQuestions) {
-            return allQuestions.sort(() => 0.5 - Math.random()).slice(0, numberOfQuestions);
-        }
-
-        // 문자열에서 모든 공백 제거
-        function normalizeString(str) {
-            return str.trim().toLowerCase().replace(/\s+/g, '');
-        }
-
-        // 정답 비교 함수
-        function confirmAnswer() {
-            const inputContainer = document.getElementById('input-container');
-            const answerContainer = document.getElementById('answer-container');
-            const feedback = document.getElementById('feedback');
-            const answerInput = document.getElementById('answer-input');
-            const correctAnswer = questions[currentQuestionIndex].answer;
-
-            const userAnswer = normalizeString(answerInput.value);
-            answerInput.value = '';
-
-            if (userAnswer === normalizeString(correctAnswer)) {
-                feedback.innerText = '맞았습니다!';
-                feedback.style.color = '#28a745';
-                correctAnswers++;
-            } else {
-                feedback.innerText = '틀렸습니다!';
-                feedback.style.color = '#dc3545';
-            }
-
-            feedback.style.opacity = '1';
-            feedback.style.visibility = 'visible';
-
-            inputContainer.style.opacity = '0';
-            setTimeout(() => {
-                inputContainer.style.display = 'none';
-                answerContainer.style.display = 'flex';
-                answerContainer.style.opacity = '1';
-                answerContainer.style.visibility = 'visible';
-                document.getElementById('answer-text').innerText = `정답: ${correctAnswer}`;
-            }, 500);
-        }
-
-
-        function nextQuestion() {
-            const inputContainer = document.getElementById('input-container');
-            const answerContainer = document.getElementById('answer-container');
-            const feedback = document.getElementById('feedback');
-
-            feedback.style.opacity = '0';
-            feedback.style.visibility = 'hidden';
-
-            answerContainer.style.opacity = '0';
-            answerContainer.style.visibility = 'hidden';
-
-            setTimeout(() => {
-                currentQuestionIndex++;
-                if (currentQuestionIndex < questions.length) {
-                    updateQuestion();
-                    answerContainer.style.display = 'none';
-                    inputContainer.style.display = 'flex';
-                    inputContainer.style.opacity = '1';
-                    inputContainer.style.visibility = 'visible';
-                } else {
-                    document.getElementById('game-screen').style.opacity = '0';
-                    setTimeout(() => {
-                        document.getElementById('game-screen').style.display = 'none';
-                        document.getElementById('result-container').style.display = 'flex';
-                        document.getElementById('result-container').style.opacity = '1';
-                        document.getElementById('result-text').innerText = `게임 종료! 맞춘 문제: ${correctAnswers}개`;
-                    }, 500);
-                }
-            }, 500);
-        }
-
-        function updateQuestion() {
-            document.getElementById('emoji-box').innerText = questions[currentQuestionIndex].emoji;
-            document.getElementById('status').innerText = `문제 ${currentQuestionIndex + 1} / ${questions.length}`;
-        }
-
-        function resetGame() {
-            const resultContainer = document.getElementById('result-container');
-            const mainScreen = document.getElementById('main-screen');
-
-            resultContainer.style.opacity = '0';
-            setTimeout(() => {
-                resultContainer.style.display = 'none';
-                mainScreen.style.display = 'flex';
-                mainScreen.style.transform = 'translateY(0)';
-                setTimeout(() => {
-                    mainScreen.style.opacity = '1';
-                }, 10);
-
-                questions = [];
-                currentQuestionIndex = 0;
-                correctAnswers = 0;
-            }, 500);
-        }
+      function resetGame() {
+        const resultContainer = document.getElementById('result-container');
+        const mainScreen = document.getElementById('main-screen');
+        resultContainer.style.opacity = '0';
+        setTimeout(() => {
+          resultContainer.style.display = 'none';
+          mainScreen.style.display = 'flex';
+          mainScreen.style.transform = 'translateY(0)';
+          setTimeout(() => {
+            mainScreen.style.opacity = '1';
+          }, 10);
+          questions = [];
+          currentQuestionIndex = 0;
+          correctAnswers = 0;
+        }, 500);
+      }
     </script>
-</body>
+  </body>
 </html>
