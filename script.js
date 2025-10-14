@@ -3,13 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainScreen = document.getElementById('main-screen');
     const gameScreen = document.getElementById('game-screen');
     const resultContainer = document.getElementById('result-container');
-
+    
     // 버튼 요소
     const categoryButtons = document.querySelectorAll('.category-button');
     const restartButton = document.querySelector('.restart-button');
     const confirmButton = document.querySelector('.confirm-button');
     const nextButton = document.querySelector('.next-button');
-
+    
     // 입력 및 텍스트 요소
     const answerInput = document.getElementById('answer-input');
     const statusText = document.getElementById('status');
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         questions = shuffle([...selectedQuestions]).slice(0, 10);
         currentQuestionIndex = 0;
         correctAnswers = 0;
-
+        
         showScreen(gameScreen);
         displayQuestion();
     };
@@ -102,10 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const checkAnswer = () => {
         const userAnswer = normalizeString(answerInput.value);
-        if (!userAnswer) return;
+        if (userAnswer === '') return;
 
         const correctAnswer = normalizeString(questions[currentQuestionIndex].answer);
-
+        
         if (userAnswer === correctAnswer) {
             feedbackText.innerText = '정답입니다!';
             feedbackText.style.color = '#28a745';
@@ -114,9 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
             feedbackText.innerText = '틀렸습니다!';
             feedbackText.style.color = '#dc3545';
         }
+        
         showAnswer();
     };
-
+    
     const showAnswer = () => {
         answerText.innerText = `정답: ${questions[currentQuestionIndex].answer}`;
         inputContainer.style.display = 'none';
@@ -125,21 +126,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const nextQuestion = () => {
         currentQuestionIndex++;
-        displayQuestion();
+        if (currentQuestionIndex < questions.length) {
+            displayQuestion();
+        } else {
+            showResult();
+        }
     };
 
     const showResult = () => {
-        resultText.innerHTML = `게임 종료!<br>${questions.length} 문제 중 ${correctAnswers}개를 맞췄어요!`;
+        resultText.innerHTML = `게임 종료!<br>${questions.length} 문제 중 ${correctAnswers}개 맞췄어요!`;
         showScreen(resultContainer);
     };
-
+    
     const showScreen = (screenToShow) => {
         [mainScreen, gameScreen, resultContainer].forEach(screen => {
             screen.style.display = 'none';
             screen.style.opacity = '0';
         });
         screenToShow.style.display = 'flex';
-        setTimeout(() => screenToShow.style.opacity = '1', 10);
+        setTimeout(() => screenToShow.style.opacity = '1', 50);
     };
 
     // 이벤트 리스너 설정
@@ -153,16 +158,20 @@ document.addEventListener('DOMContentLoaded', () => {
     restartButton.addEventListener('click', () => showScreen(mainScreen));
     confirmButton.addEventListener('click', checkAnswer);
     nextButton.addEventListener('click', nextQuestion);
-
+    
     answerInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' && inputContainer.style.display === 'flex') {
-            checkAnswer();
+        if (event.key === 'Enter') {
+            if (inputContainer.style.display === 'flex') {
+                checkAnswer();
+            }
         }
     });
-
+    
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' && answerContainer.style.display === 'flex') {
-            nextQuestion();
+       if (event.key === 'Enter') {
+            if (answerContainer.style.display === 'flex') {
+                nextQuestion();
+            }
         }
     });
 });
