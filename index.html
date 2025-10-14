@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이모지로 영화 맞추기</title>
+    <title>이모지로 문제 맞추기</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container" id="main-screen">
-        <h1 class="title">이모지 게임</h1>
-        <button class="button start-button">게임 시작</button>
+        <h1 class="title">이모지 퀴즈</h1>
+        <div class="category-container">
+            <button class="button category-button" data-category="movies">🎬 영화</button>
+            <button class="button category-button" data-category="animation">👾 애니메이션</button>
+            <button class="button category-button" data-category="books">📚 책</button>
+        </div>
     </div>
 
     <div class="container game-screen" id="game-screen">
@@ -17,7 +21,7 @@
         <div class="emoji-box" id="emoji-box"></div>
         <div class="feedback" id="feedback"></div>
         <div class="input-container" id="input-container">
-            <input type="text" class="input-box" id="answer-input" placeholder="영화 제목을 입력하세요">
+            <input type="text" class="input-box" id="answer-input" placeholder="정답을 입력하세요">
             <button class="button confirm-button">정답 확인</button>
         </div>
         <div class="answer-container" id="answer-container">
@@ -28,7 +32,7 @@
 
     <div class="container result-container" id="result-container">
         <div class="result-text" id="result-text"></div>
-        <button class="button restart-button">다시하기</button>
+        <button class="button restart-button">처음으로</button>
     </div>
 
     <script src="script.js"></script>
