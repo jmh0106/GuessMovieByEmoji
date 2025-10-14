@@ -80,10 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const displayQuestion = () => {
-        if (currentQuestionIndex >= questions.length) {
-            showResult();
-            return;
-        }
         const question = questions[currentQuestionIndex];
         emojiBox.innerText = question.emoji;
         statusText.innerText = `문제 ${currentQuestionIndex + 1} / ${questions.length}`;
@@ -147,6 +143,20 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => screenToShow.style.opacity = '1', 50);
     };
 
+    // ### BUG FIX: 통합된 엔터 키 이벤트 리스너 ###
+    const handleEnterKey = (event) => {
+        if (event.key !== 'Enter') return;
+
+        // 정답 입력 창이 보일 때
+        if (inputContainer.style.display === 'flex') {
+            checkAnswer();
+        } 
+        // 정답 확인 창이 보일 때
+        else if (answerContainer.style.display === 'flex') {
+            nextQuestion();
+        }
+    };
+
     // 이벤트 리스너 설정
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -158,20 +168,5 @@ document.addEventListener('DOMContentLoaded', () => {
     restartButton.addEventListener('click', () => showScreen(mainScreen));
     confirmButton.addEventListener('click', checkAnswer);
     nextButton.addEventListener('click', nextQuestion);
-    
-    answerInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            if (inputContainer.style.display === 'flex') {
-                checkAnswer();
-            }
-        }
-    });
-    
-    document.addEventListener('keydown', (event) => {
-       if (event.key === 'Enter') {
-            if (answerContainer.style.display === 'flex') {
-                nextQuestion();
-            }
-        }
-    });
+    document.addEventListener('keydown', handleEnterKey); // 통합된 리스너를 사용
 });
