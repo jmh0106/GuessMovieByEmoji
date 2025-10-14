@@ -1,45 +1,65 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 화면 요소
     const mainScreen = document.getElementById('main-screen');
     const gameScreen = document.getElementById('game-screen');
     const resultContainer = document.getElementById('result-container');
-    const startButton = document.querySelector('.start-button');
+    
+    // 버튼 요소
+    const categoryButtons = document.querySelectorAll('.category-button');
     const restartButton = document.querySelector('.restart-button');
     const confirmButton = document.querySelector('.confirm-button');
     const nextButton = document.querySelector('.next-button');
+    
+    // 입력 및 텍스트 요소
     const answerInput = document.getElementById('answer-input');
+    const statusText = document.getElementById('status');
+    const emojiBox = document.getElementById('emoji-box');
+    const feedbackText = document.getElementById('feedback');
+    const answerText = document.getElementById('answer-text');
+    const resultText = document.getElementById('result-text');
 
-    const allQuestions = [
-        { emoji: '🚢🧊💔👫🎨', answer: '타이타닉' },
-        { emoji: '🦸‍♂️🦸‍♀️🔨🛡️🕷️Infinity', answer: '어벤져스' },
-        { emoji: '🧙‍♂️⚡️🚂🏰🐍', answer: '해리포터' },
-        { emoji: '🧑‍🚀🌌🕰️👨‍👧📖', answer: '인터스텔라' },
-        { emoji: '🦁👑🐗🦓🦒', answer: '라이온 킹' },
-        { emoji: '❄️👸☃️🎶', answer: '겨울왕국' },
-        { emoji: '🏠👨‍👩‍👧‍👦🍑 parasitic', answer: '기생충' },
-        { emoji: '🤡🃏🧠💃🕺', answer: '조커' },
-        { emoji: '🦖🏝️🚙琥珀', answer: '쥬라기 공원' },
-        { emoji: '🔵🔴💊🥋🕶️', answer: '매트릭스' },
-        { emoji: '🎹🎶💖🌃', answer: '라라랜드' },
-        { emoji: '🍫🍤🏃‍♂️🇺🇸', answer: '포레스트 검프' },
-        { emoji: '🦇🤵‍♂️💰💣', answer: '다크 나이트' },
-        { emoji: '😴🌀🗼🤔', answer: '인셉션' },
-        { emoji: '👽🚲🌕👆', answer: 'ET' },
-        { emoji: '👻🏺 potter', answer: '사랑과 영혼' },
-        { emoji: '👨‍🚀🐒🦴🎶', answer: '2001 스페이스 오디세이' },
-        { emoji: '🚗💨🏜️🎸🔥', answer: '매드 맥스: 분노의 도로' },
-        { emoji: '🤖❤️🌱🗑️', answer: '월-E' },
-        { emoji: '🧞‍♂️램프🕌🐒', answer: '알라딘' },
-        { emoji: '🤠🚀🧸🐍', answer: '토이스토리' },
-        { emoji: '🎈🏠👴🏻👦뱃지', answer: '업' },
-        { emoji: '🌊 nemo 아빠', answer: '니모를 찾아서' },
-        { emoji: '🏹👩‍🦰🎯🐻', answer: '메리다와 마법의 숲' },
-        { emoji: '🧠😊😥😡🤢😨', answer: '인사이드 아웃' },
-        { emoji: '🚆🧟‍♂️👨‍👧🇰🇷', answer: '부산행' },
-        { emoji: '🐔👮‍♂️🍗😂', answer: '극한직업' },
-        { emoji: '👨‍⚖️👻 CG', answer: '신과함께' },
-        { emoji: '🔨🐙📺 복수', answer: '올드보이' },
-        { emoji: '🏹🎯 조선시대', answer: '최종병기 활' }
-    ];
+    // UI 컨테이너
+    const inputContainer = document.getElementById('input-container');
+    const answerContainer = document.getElementById('answer-container');
+
+    const questionsData = {
+        movies: [
+            { emoji: '🚢🧊💔👫🎨', answer: '타이타닉' },
+            { emoji: '🦸‍♂️🦸‍♀️🔨🛡️🕷️💎', answer: '어벤져스' },
+            { emoji: '🧑‍🚀🌌🕰️👨‍👧📖', answer: '인터스텔라' },
+            { emoji: '🤡🃏🧠💃🕺', answer: '조커' },
+            { emoji: '🦖🏝️🚙琥珀', answer: '쥬라기 공원' },
+            { emoji: '🔵🔴💊🥋🕶️', answer: '매트릭스' },
+            { emoji: '🎹🎶💖🌃', answer: '라라랜드' },
+            { emoji: '🍫🍤🏃‍♂️🇺🇸', answer: '포레스트 검프' },
+            { emoji: '🦇🤵‍♂️💰💣', answer: '다크 나이트' },
+            { emoji: '😴🌀🗼🤔', answer: '인셉션' }
+        ],
+        animation: [
+            { emoji: '🦁👑🐗🦓🦒', answer: '라이온 킹' },
+            { emoji: '❄️👸☃️🎶', answer: '겨울왕국' },
+            { emoji: '🤖❤️🌱🗑️', answer: '월-E' },
+            { emoji: '🧞‍♂️램프🕌🐒', answer: '알라딘' },
+            { emoji: '🤠🚀🧸🐍', answer: '토이스토리' },
+            { emoji: '🎈🏠👴🏻👦뱃지', answer: '업' },
+            { emoji: '🌊🐠👨‍👦🔍', answer: '니모를 찾아서' },
+            { emoji: '🧠😊😥😡🤢😨', answer: '인사이드 아웃' },
+            { emoji: '🐷🍜🥟🥋🐼', answer: '쿵푸팬더' },
+            { emoji: '🐉⚔️👦🏻🏰', answer: '드래곤 길들이기'}
+        ],
+        books: [
+            { emoji: '🧙‍♂️⚡️🚂🏰🐍', answer: '해리포터' },
+            { emoji: '🧑🏻‍⚖️👨‍🦳🍞⛓️🇫🇷', answer: '레 미제라블' },
+            { emoji: '💍🌋🧙‍♂️👣', answer: '반지의 제왕' },
+            { emoji: '🦊🌹✈️🤴', answer: '어린왕자' },
+            { emoji: '🎩🧐🔍🇬🇧', answer: '셜록 홈즈' },
+            { emoji: '🐯🛶🌊🕉️', answer: '파이 이야기' },
+            { emoji: '👴🏻🎣🦈🌊', answer: '노인과 바다' },
+            { emoji: '👧🌪️🦁🤖 tin man', answer: '오즈의 마법사' },
+            { emoji: '🎩🍫🏭🎟️', answer: '찰리와 초콜릿 공장' },
+            { emoji: '👩‍❤️‍👨 Prejudice pride', answer: '오만과 편견'}
+        ]
+    };
 
     let questions = [];
     let currentQuestionIndex = 0;
@@ -47,8 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const shuffle = (array) => array.sort(() => 0.5 - Math.random());
 
-    const startGame = () => {
-        questions = shuffle([...allQuestions]).slice(0, 10);
+    const startGame = (category) => {
+        questions = shuffle([...questionsData[category]]).slice(0, 10);
         currentQuestionIndex = 0;
         correctAnswers = 0;
         
@@ -58,16 +78,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const displayQuestion = () => {
         const question = questions[currentQuestionIndex];
-        document.getElementById('emoji-box').innerText = question.emoji;
-        document.getElementById('status').innerText = `문제 ${currentQuestionIndex + 1} / ${questions.length}`;
+        emojiBox.innerText = question.emoji;
+        statusText.innerText = `문제 ${currentQuestionIndex + 1} / ${questions.length}`;
         resetAnswerUI();
     };
 
     const resetAnswerUI = () => {
         answerInput.value = '';
-        document.getElementById('input-container').style.display = 'flex';
-        document.getElementById('answer-container').style.display = 'none';
-        document.getElementById('feedback').innerText = '';
+        inputContainer.style.display = 'flex';
+        answerContainer.style.display = 'none';
+        feedbackText.innerText = '';
         answerInput.focus();
     };
 
@@ -75,25 +95,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const checkAnswer = () => {
         const userAnswer = normalizeString(answerInput.value);
+        if (!userAnswer) return; // 입력값이 없으면 무시
+
         const correctAnswer = normalizeString(questions[currentQuestionIndex].answer);
-        const feedback = document.getElementById('feedback');
 
         if (userAnswer === correctAnswer) {
-            feedback.innerText = '정답입니다!';
-            feedback.style.color = '#28a745';
+            feedbackText.innerText = '정답입니다!';
+            feedbackText.style.color = '#28a745';
             correctAnswers++;
         } else {
-            feedback.innerText = '틀렸습니다!';
-            feedback.style.color = '#dc3545';
+            feedbackText.innerText = '틀렸습니다!';
+            feedbackText.style.color = '#dc3545';
         }
         
         showAnswer();
     };
     
     const showAnswer = () => {
-        document.getElementById('input-container').style.display = 'none';
-        document.getElementById('answer-container').style.display = 'flex';
-        document.getElementById('answer-text').innerText = `정답: ${questions[currentQuestionIndex].answer}`;
+        inputContainer.style.display = 'none';
+        answerContainer.style.display = 'flex';
+        answerText.innerText = `정답: ${questions[currentQuestionIndex].answer}`;
     };
 
     const nextQuestion = () => {
@@ -106,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const showResult = () => {
-        document.getElementById('result-text').innerText = `게임 종료!\n${correctAnswers}개 맞췄어요!`;
+        resultText.innerHTML = `게임 종료!<br>${correctAnswers}개 맞췄어요!`;
         showScreen(resultContainer);
     };
     
@@ -119,22 +140,29 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => screenToShow.style.opacity = '1', 10);
     };
 
-    startButton.addEventListener('click', startGame);
+    // 이벤트 리스너 설정
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const category = button.dataset.category;
+            startGame(category);
+        });
+    });
+
     restartButton.addEventListener('click', () => showScreen(mainScreen));
     confirmButton.addEventListener('click', checkAnswer);
     nextButton.addEventListener('click', nextQuestion);
+    
     answerInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
-            if (document.getElementById('input-container').style.display === 'flex') {
+            if (inputContainer.style.display === 'flex') {
                 checkAnswer();
             }
         }
     });
     
-    // '다음 문제' 버튼이 보일 때 Enter 키를 누르면 다음 문제로 넘어가는 기능 추가
     document.addEventListener('keydown', (event) => {
        if (event.key === 'Enter') {
-            if (document.getElementById('answer-container').style.display === 'flex') {
+            if (answerContainer.style.display === 'flex') {
                 nextQuestion();
             }
         }
