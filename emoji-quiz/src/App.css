@@ -121,7 +121,7 @@ body {
 .feedback {
     font-size: 1.8rem;
     font-weight: 700;
-    height: 30px;
+    min-height: 30px;
     margin-top: 20px;
 }
 
