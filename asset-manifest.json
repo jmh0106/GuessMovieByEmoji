@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/GuessMovieByEmoji/static/css/main.a6c191fd.css",
-    "main.js": "/GuessMovieByEmoji/static/js/main.56c1ad6f.js",
+    "main.js": "/GuessMovieByEmoji/static/js/main.bfe7be70.js",
     "index.html": "/GuessMovieByEmoji/index.html",
     "main.a6c191fd.css.map": "/GuessMovieByEmoji/static/css/main.a6c191fd.css.map",
-    "main.56c1ad6f.js.map": "/GuessMovieByEmoji/static/js/main.56c1ad6f.js.map"
+    "main.bfe7be70.js.map": "/GuessMovieByEmoji/static/js/main.bfe7be70.js.map"
   },
   "entrypoints": [
     "static/css/main.a6c191fd.css",
-    "static/js/main.56c1ad6f.js"
+    "static/js/main.bfe7be70.js"
   ]
 }
