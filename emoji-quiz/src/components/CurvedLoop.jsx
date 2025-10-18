@@ -5,10 +5,13 @@ const CurvedLoop = ({
   marqueeText = '',
   speed = 2,
   className,
-  curveAmount = 400,
+  curveAmount = 400, // 기본 굴곡 값
   direction = 'left',
-  interactive = true
+  interactive = true // 기본적으로 드래그 가능하도록 설정
 }) => {
+  // ### BUG FIX: 굴곡이 있을 때는 드래그 기능을 비활성화 ###
+  const isDraggable = interactive && curveAmount === 0;
+
   const text = useMemo(() => {
     const hasTrailing = /\s|\u00A0$/.test(marqueeText);
     return (hasTrailing ? marqueeText.replace(/\s+$/, '') : marqueeText) + '\u00A0';
@@ -19,21 +22,23 @@ const CurvedLoop = ({
   const pathRef = useRef(null);
   const [spacing, setSpacing] = useState(0);
   const [offset, setOffset] = useState(0);
+  const [pathLength, setPathLength] = useState(0); 
+  
   const uid = useId();
   const pathId = `curve-${uid}`;
-  const pathD = `M-100,40 Q500,${40 + curveAmount} 1540,40`;
+  const pathD = curveAmount === 0 
+    ? `M-100,60 H1540`
+    : `M-100,40 Q500,${40 + curveAmount} 1540,40`;
 
   const dragRef = useRef(false);
   const lastXRef = useRef(0);
   const dirRef = useRef(direction);
   const velRef = useRef(0);
 
-  const textLength = spacing;
-  const totalText = textLength
-    ? Array(Math.ceil(1800 / textLength) + 2)
-        .fill(text)
-        .join('')
+  const totalText = spacing && pathLength
+    ? Array(Math.ceil(pathLength / spacing) + 2).fill(text).join('')
     : text;
+  
   const ready = spacing > 0;
 
   useEffect(() => {
@@ -41,13 +46,10 @@ const CurvedLoop = ({
   }, [text, className]);
 
   useEffect(() => {
-    if (!spacing) return;
-    if (textPathRef.current) {
-      const initial = -spacing;
-      textPathRef.current.setAttribute('startOffset', initial + 'px');
-      setOffset(initial);
+    if (pathRef.current) {
+      setPathLength(pathRef.current.getTotalLength());
     }
-  }, [spacing]);
+  }, [pathD]);
 
   useEffect(() => {
     if (!spacing || !ready) return;
@@ -57,11 +59,9 @@ const CurvedLoop = ({
         const delta = dirRef.current === 'right' ? speed : -speed;
         const currentOffset = parseFloat(textPathRef.current.getAttribute('startOffset') || '0');
         let newOffset = currentOffset + delta;
-
         const wrapPoint = spacing;
         if (newOffset <= -wrapPoint) newOffset += wrapPoint;
         if (newOffset > 0) newOffset -= wrapPoint;
-
         textPathRef.current.setAttribute('startOffset', newOffset + 'px');
         setOffset(newOffset);
       }
@@ -72,7 +72,7 @@ const CurvedLoop = ({
   }, [spacing, speed, ready]);
 
   const onPointerDown = e => {
-    if (!interactive) return;
+    if (!isDraggable) return; // 드래그 불가능하면 함수 종료
     dragRef.current = true;
     lastXRef.current = e.clientX;
     velRef.current = 0;
@@ -80,29 +80,27 @@ const CurvedLoop = ({
   };
 
   const onPointerMove = e => {
-    if (!interactive || !dragRef.current || !textPathRef.current) return;
+    if (!isDraggable || !dragRef.current || !textPathRef.current) return;
     const dx = e.clientX - lastXRef.current;
     lastXRef.current = e.clientX;
     velRef.current = dx;
-
     const currentOffset = parseFloat(textPathRef.current.getAttribute('startOffset') || '0');
     let newOffset = currentOffset + dx;
-
     const wrapPoint = spacing;
     if (newOffset <= -wrapPoint) newOffset += wrapPoint;
     if (newOffset > 0) newOffset -= wrapPoint;
-
     textPathRef.current.setAttribute('startOffset', newOffset + 'px');
     setOffset(newOffset);
   };
 
   const endDrag = () => {
-    if (!interactive) return;
+    if (!isDraggable) return;
     dragRef.current = false;
     dirRef.current = velRef.current > 0 ? 'right' : 'left';
   };
 
-  const cursorStyle = interactive ? (dragRef.current ? 'grabbing' : 'grab') : 'auto';
+  // 드래그 가능 여부에 따라 마우스 커서 모양 변경
+  const cursorStyle = isDraggable ? (dragRef.current ? 'grabbing' : 'grab') : 'default';
 
   return (
     <div
@@ -113,10 +111,7 @@ const CurvedLoop = ({
       onPointerUp={endDrag}
       onPointerLeave={endDrag}>
       <svg className="curved-loop-svg" viewBox="0 0 1440 120">
-        <text
-          ref={measureRef}
-          xmlSpace="preserve"
-          style={{ visibility: 'hidden', opacity: 0, pointerEvents: 'none' }}>
+        <text ref={measureRef} xmlSpace="preserve" style={{ visibility: 'hidden', opacity: 0, pointerEvents: 'none' }}>
           {text}
         </text>
         <defs>
@@ -124,11 +119,7 @@ const CurvedLoop = ({
         </defs>
         {ready && (
           <text fontWeight="bold" xmlSpace="preserve" className={className}>
-            <textPath
-              ref={textPathRef}
-              href={`#${pathId}`}
-              startOffset={offset + 'px'}
-              xmlSpace="preserve">
+            <textPath ref={textPathRef} href={`#${pathId}`} startOffset="0px" xmlSpace="preserve">
               {totalText}
             </textPath>
           </text>

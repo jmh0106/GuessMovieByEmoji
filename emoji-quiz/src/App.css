@@ -1,39 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+/* 1. Tailwind 지시어가 다른 모든 코드보다 가장 먼저 와야 합니다. */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* --- 아래 내용을 추가해주세요 --- */
+/* 2. shadcn/ui가 필요로 하는 모든 CSS 변수를 정의합니다. */
 @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-    /* ... (shadcn의 모든 색상 변수들) */
-    /* 이 부분은 shadcn이 컴포넌트를 추가할 때 자동으로 채워주므로,
-       지금은 비워두거나 기본값만 넣어두어도 괜찮습니다. */
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    /* ... (다크 모드 색상 변수들) */
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-/* --- 여기까지 추가 --- */
-
-
-/* --- 기존의 다른 CSS 코드들은 이 아래에 그대로 둡니다 --- */
+/* 3. 나머지 모든 CSS 코드들은 Tailwind와 shadcn 설정 아래에 위치해야 합니다. */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
-/* ... */
 
 body {
     margin: 0;
@@ -49,27 +68,30 @@ body {
     height: 100vh;
 }
 
+/* --- 이하 모든 기존 스타일은 그대로 유지 --- */
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 900px; /* 최대 너비 설정 */
+    max-width: 900px;
     padding: 20px;
-    box-sizing: border-box; /* 패딩이 너비에 포함되도록 설정 */
+    box-sizing: border-box;
 }
 
-/* --- 카테고리 반응형 --- */
 .category-container {
     display: flex;
     gap: 15px;
     justify-content: center;
     flex-wrap: wrap; /* 카테고리가 여러 줄로 나뉠 수 있게 함 */
     margin-bottom: 20px;
+    
+    /* ### BUG FIX: 버튼이 제목 애니메이션 위에 오도록 z-index 추가 ### */
+    position: relative; /* z-index를 적용하기 위해 필요합니다. */
+    z-index: 10;      /* 숫자가 높을수록 위에 표시됩니다. */
 }
 
-/* --- 언어 선택 버튼 --- */
 .language-switcher {
     position: absolute;
     top: 20px;
